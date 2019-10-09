@@ -1,4 +1,4 @@
-#cookiecutter-test#
+#cookiecutter#
 
 ## First steps & general Info ##
 This template include the following:

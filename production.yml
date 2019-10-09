@@ -104,7 +104,7 @@ services:
     build: ./backend
     image: webworkerimage
     working_dir: /usr/src/app
-    container_name: cookiecutter-test-celeryworker
+    container_name: cookiecutter-celeryworker
     volumes:
       - mediadata:/usr/src/app/media
       - ./backend:/usr/src/app
@@ -124,7 +124,7 @@ services:
     build: ./backend
     image: webworkerimage
     working_dir: /usr/src/app
-    container_name: cookiecutter-test-celerybeat
+    container_name: cookiecutter-celerybeat
     volumes:
       - /usr/src/app
       - ./backend:/usr/src/app

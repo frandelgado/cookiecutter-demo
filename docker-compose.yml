@@ -31,7 +31,7 @@ services:
   node:
     restart: always
     build: ./frontend
-    container_name: cookiecutter-test-node
+    container_name: cookiecutter-node
     command: ["npm", "start"]
     environment:
       VIRTUAL_HOST: 'frontend'
@@ -49,7 +49,7 @@ services:
   nginx:
     restart: always
     build: ./nginx
-    container_name: cookiecutter-test-nginx
+    container_name: cookiecutter-nginx
     environment:
       REACT_DEFAULT_HOST: 'localhost'
       API_DEFAULT_HOST: 'api.localhost'
@@ -75,7 +75,7 @@ services:
   postgres:
     restart: always
     image: postgres:10.7
-    container_name: cookiecutter-test-postgres
+    container_name: cookiecutter-postgres
     volumes:
       - pgdata:/var/lib/postgresql/data/
     networks:
@@ -97,7 +97,7 @@ services:
     build: ./backend
     image: webworkerimage
     working_dir: /usr/src/app
-    container_name: cookiecutter-test-celeryworker
+    container_name: cookiecutter-celeryworker
     volumes:
       - mediadata:/usr/src/app/media
       - ./backend:/usr/src/app
@@ -117,7 +117,7 @@ services:
     build: ./backend
     image: webworkerimage
     working_dir: /usr/src/app
-    container_name: cookiecutter-test-celerybeat
+    container_name: cookiecutter-celerybeat
     volumes:
       - /usr/src/app
       - ./backend:/usr/src/app

@@ -48,30 +48,30 @@ restart: clean build up ps
 	@echo "Restarted all containers"
 
 reboot-db:
-	docker exec cookiecutter-test-postgres /bin/sh -c "dropdb -U postgres postgres"
-	docker exec cookiecutter-test-postgres /bin/sh -c "createdb -U postgres postgres"
+	docker exec cookiecutter-postgres /bin/sh -c "dropdb -U postgres postgres"
+	docker exec cookiecutter-postgres /bin/sh -c "createdb -U postgres postgres"
 
 ########
 #SHELLS#
 ########
 
 shell-nginx:
-	docker exec -ti cookiecutter-test-nginx bash
+	docker exec -ti cookiecutter-nginx bash
 
 shell-web:
 	docker exec -ti $(WEB) bash
 
 shell-db:
-	docker exec -ti cookiecutter-test-postgres bash
+	docker exec -ti cookiecutter-postgres bash
 
 shell-node:
 	docker exec -ti $(NODE) bash
 
 shell-celeryw:
-	docker exec -ti cookiecutter-test-celeryworker bash
+	docker exec -ti cookiecutter-celeryworker bash
 
 shell-celeryb:
-	docker exec -ti cookiecutter-test-celerybeat bash
+	docker exec -ti cookiecutter-celerybeat bash
 
 ######
 #LOGS#
@@ -165,7 +165,7 @@ set-django: collectstatic migrate compilemessages
 backup-db:
 	if [ ! -d $(BACKUPS_DIR) ] ; then mkdir $(BACKUPS_DIR) ; fi
 	$(eval DUMP_NAME = $(BACKUPS_DIR)/`date +%Y%m%d`$(ENV_STAGE)_sac_dump_.gz)
-	docker exec -t cookiecutter-test-postgres pg_dumpall -c -U postgres | gzip > $(DUMP_NAME)
+	docker exec -t cookiecutter-postgres pg_dumpall -c -U postgres | gzip > $(DUMP_NAME)
 
 
 #############
