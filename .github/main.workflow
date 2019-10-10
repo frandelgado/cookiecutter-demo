@@ -1,30 +1,17 @@
-workflow "Linters" {
+workflow "Publish to SNS topic" {
   on = "push"
-  resolves = ["Black Linter", "Flake8 Linter"]
+  resolves = ["Publish"]
 }
 
-action "Build" {
-  uses = "jefftriplett/python-actions@ba888adab5b57956dce82b7dfc06e87b65090a6d"
-  args = "pip install flake8 black"
-  env = {
-    VENV_DIR = "/opt/"
-  }
+action "Topic" {
+  uses = "actions/aws/cli@master"
+  args = "sns create-topic --name my-topic"
+  secrets = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"]
 }
 
-action "Black Linter" {
-  uses = "jefftriplett/python-actions@ba888adab5b57956dce82b7dfc06e87b65090a6d"
-  args = "black --check backend"
-  needs = ["Build"]
-  env = {
-    VENV_DIR = "/opt/"
-  }
-}
-
-action "Flake8 Linter" {
-  uses = "jefftriplett/python-actions@ba888adab5b57956dce82b7dfc06e87b65090a6d"
-  args = "flake8 backend"
-  needs = ["Build"]
-  env = {
-    VENV_DIR = "/opt/"
-  }
+action "Publish" {
+  needs = ["Topic"]
+  uses = "actions/aws/cli@master"
+  args = "sns publish --topic-arn `jq .TopicArn /github/home/Topic.json --raw-output` --subject \"[$GITHUB_REPOSITORY] Code was pushed to $GITHUB_REF\" --message file://$GITHUB_EVENT_PATH"
+  secrets = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"]
 }
